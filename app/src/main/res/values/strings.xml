@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">SpotifyStreamer</string>
+
+    <!-- Main view strings -->
+    <string name="title_activity_main">@string/app_name</string>
+    <string name="main_activity_hint">Use the search feature to search for your favourite artist!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Search view strings -->
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="action_search_artist">Search</string>
+    <string name="search_artist_hint">Artist Search</string>
+
+    <!-- Logging strings -->
+    <string name="log_tag">@string/app_name</string>
+    <string name="log_search_formatter">Search string: "%s"</string>
+    <string name="log_onCreate_formatter">Created Activity: "%1$s"</string>
+    <string name="log_method_call_formatter">Called Method: "%1$s" on class "%2$s"</string>
+</resources>
