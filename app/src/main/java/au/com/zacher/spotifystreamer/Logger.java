@@ -46,6 +46,9 @@ public class Logger extends Application {
         Logger.writeLog(Log.WARN, formatStringId, arguments);
     }
 
+    public static void wtf(Throwable tr, Object... arguments) {
+        Logger.wtf(R.string.log_wtf, tr, arguments);
+    }
     public static void wtf(int formatStringId, Throwable tr, Object... arguments) {
         String tag = appContext.getString(R.string.log_tag);
         String logStr = appContext.getString(formatStringId, arguments);

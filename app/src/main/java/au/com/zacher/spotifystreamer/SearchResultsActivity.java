@@ -8,16 +8,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
+import au.com.zacher.spotifystreamer.adapter.ArtistListAdapter;
+import kaaes.spotify.webapi.android.models.Artist;
+import kaaes.spotify.webapi.android.models.Image;
+
 
 public class SearchResultsActivity extends ListActivity {
+    protected ArtistListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_results);
+        setContentView(R.layout.activity_artist_search_results);
 
         Logger.logActionCreate("MainActivity");
 
+        listAdapter = new ArtistListAdapter(getApplicationContext(), R.layout.fragment_artist_search);
+        this.setListAdapter(listAdapter);
         handleIntent();
     }
 
@@ -43,6 +52,14 @@ public class SearchResultsActivity extends ListActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
 
             Log.d(getString(R.string.log_tag), String.format(getString(R.string.log_search_formatter), query));
+
+            // TODO: spotify integration
+            listAdapter.clear();
+            listAdapter.addAll(
+                new Artist(){{name = "Artist A"; id = "A"; images = new ArrayList<Image>();}},
+                new Artist(){{name = "Artist B"; id = "B"; images = new ArrayList<Image>();}},
+                new Artist(){{name = "Artist C"; id = "C"; images = new ArrayList<Image>();}}
+            );
         }
     }
 
