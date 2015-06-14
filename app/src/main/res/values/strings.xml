@@ -10,13 +10,21 @@
     <string name="artist_search_activity_title">SearchActivity</string>
     <string name="action_search_artist">Search</string>
     <string name="artist_search_hint">Artist Search</string>
-    <string name="artist_search_item_placeholder">Loading&#8320;</string>
+    <string name="artist_search_item_placeholder">Loading...</string>
     <string name="artist_search_item_image_description">Artist Image</string>
 
     <!-- Logging strings -->
     <string name="log_tag">@string/app_name</string>
-    <string name="log_search_formatter">Search string: "%s"</string>
+    <string name="log_search_formatter">Search string: "%1$s"</string>
     <string name="log_onCreate_formatter">Created Activity: "%1$s"</string>
     <string name="log_method_call_formatter">Called Method: "%1$s" on class "%2$s"</string>
     <string name="log_wtf">This should never happen</string>
+    <string name="log_api_error">Spotify API Error:
+    URL: %1$s
+    STATUS: %2$s
+    MESSAGE: %3$s</string>
+    <string name="log_image_load_error">Failed to load image: %1$s</string>
+
+    <!-- query URLS -->
+    <string name="query_url_artist">https://api.spotify.com/v1/search?q=%1$s&amp;type=artist</string>
 </resources>

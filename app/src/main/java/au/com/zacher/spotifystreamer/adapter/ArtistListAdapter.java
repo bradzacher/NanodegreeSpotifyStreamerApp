@@ -1,6 +1,8 @@
 package au.com.zacher.spotifystreamer.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import au.com.zacher.spotifystreamer.Logger;
 import au.com.zacher.spotifystreamer.R;
 import kaaes.spotify.webapi.android.models.Artist;
 
@@ -21,6 +26,7 @@ public class ArtistListAdapter extends ArrayAdapter<Artist> {
     private static class ViewHolder {
         TextView name;
         ImageView image;
+        int position;
     }
 
     public ArtistListAdapter(Context context, int resource) {
@@ -32,11 +38,11 @@ public class ArtistListAdapter extends ArrayAdapter<Artist> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         Artist item = this.getItem(position);
 
         // use ViewHolder pattern to speedup performance
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_artist_search, parent, false);
             holder = new ViewHolder();
@@ -48,14 +54,37 @@ public class ArtistListAdapter extends ArrayAdapter<Artist> {
         }
 
         // bind the values to the view
+        holder.position = position;
         holder.name.setText(item.name);
+        String url = null;
         if (!item.images.isEmpty()) {
-            Picasso.with(getContext())
-                    .load(item.images.get(0).url)
-                    .placeholder(R.drawable.ic_music_note_black_48dp)
-                    .error(R.drawable.ic_error_outline_black_48dp)
-                    .into(holder.image);
+            url = item.images.get(0).url;
         }
+        // we load the image into a background imageView first so we can check that the view hsan't been recycled before swapping it in
+        // this will prevent accidents where artist images are shown for the incorrect artist if the image loads after recycling
+        final ImageView backgroundLoadedImage = new ImageView(this.getContext());
+        holder.image.setImageDrawable(this.getContext().getResources().getDrawable(R.drawable.ic_music_note_black_48dp));
+        final String finalUrl = url;
+        Picasso.with(getContext())
+                .load(url)
+                .error(R.drawable.ic_error_outline_black_48dp)
+                .into(backgroundLoadedImage, new Callback() {
+                    // we need to make sure that the view hasn't been recycled before swapping the loaded image in
+                    @Override
+                    public void onSuccess() {
+                        if (holder.position == position) {
+                            holder.image.setImageDrawable(backgroundLoadedImage.getDrawable());
+                        }
+                    }
+
+                    @Override
+                    public void onError() {
+                        Logger.e(R.string.log_image_load_error, finalUrl);
+                        if (holder.position == position) {
+                            holder.image.setImageDrawable(backgroundLoadedImage.getDrawable());
+                        }
+                    }
+                });
 
         return convertView;
     }

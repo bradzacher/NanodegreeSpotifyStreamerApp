@@ -4,15 +4,21 @@ import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+
 
 import java.util.ArrayList;
 
 import au.com.zacher.spotifystreamer.adapter.ArtistListAdapter;
+import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.models.Artist;
+import kaaes.spotify.webapi.android.models.ArtistsPager;
 import kaaes.spotify.webapi.android.models.Image;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class SearchResultsActivity extends ListActivity {
@@ -21,13 +27,13 @@ public class SearchResultsActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_artist_search_results);
+        this.setContentView(R.layout.activity_artist_search_results);
 
         Logger.logActionCreate("MainActivity");
 
-        listAdapter = new ArtistListAdapter(getApplicationContext(), R.layout.fragment_artist_search);
+        this.listAdapter = new ArtistListAdapter(this.getApplicationContext(), R.layout.fragment_artist_search);
         this.setListAdapter(listAdapter);
-        handleIntent();
+        this.handleIntent();
     }
 
     @Override
@@ -50,16 +56,50 @@ public class SearchResultsActivity extends ListActivity {
         // handle the search intent
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+            if (query.indexOf('*') < 0) {
+                query = '*' + query + '*';
+            }
 
-            Log.d(getString(R.string.log_tag), String.format(getString(R.string.log_search_formatter), query));
+            Logger.d(R.string.log_search_formatter, query);
 
-            // TODO: spotify integration
+            // so the user knows that loading is occurring
             listAdapter.clear();
-            listAdapter.addAll(
-                new Artist(){{name = "Artist A"; id = "A"; images = new ArrayList<Image>();}},
-                new Artist(){{name = "Artist B"; id = "B"; images = new ArrayList<Image>();}},
-                new Artist(){{name = "Artist C"; id = "C"; images = new ArrayList<Image>();}}
-            );
+            listAdapter.add(new Artist() {{
+                name = "Loading...";
+                id = null;
+                images = new ArrayList<Image>();
+            }});
+
+            // for running back on the main thread
+            final Handler mainHandler = new Handler(this.getApplicationContext().getMainLooper());
+
+            // query the API
+            SpotifyApi api = new SpotifyApi();
+            api.getService().searchArtists(query, new Callback<ArtistsPager>() {
+                @Override
+                public void success(final ArtistsPager artistsPager, Response response) {
+                    // TODO: spotify integration
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            listAdapter.clear();
+                            listAdapter.addAll(artistsPager.artists.items);
+                        }
+                    });
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Logger.e(R.string.log_api_error, error.getUrl(), error.getResponse().getStatus(), error.getMessage());
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            listAdapter.clear();
+                            // TODO: display an error message
+                        }
+                    });
+                }
+            });
         }
     }
 
