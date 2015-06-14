@@ -1,17 +1,25 @@
 <resources>
     <string name="app_name">SpotifyStreamer</string>
 
+    <!-- Common Actions -->
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+
     <!-- Main view strings -->
     <string name="main_activity_title">@string/app_name</string>
     <string name="main_activity_hint">Use the search feature to search for your favourite artist!</string>
-    <string name="action_settings">Settings</string>
 
     <!-- Search view strings -->
-    <string name="artist_search_activity_title">SearchActivity</string>
-    <string name="action_search_artist">Search</string>
+    <string name="search_no_results">Your search returned no results...</string>
+    <string name="search_item_placeholder">Loading...</string>
+    <string name="search_item_image_description">Item Image</string>
+
+    <!-- Artist search view strings -->
+    <string name="artist_search_activity_title">Artist Search</string>
     <string name="artist_search_hint">Artist Search</string>
-    <string name="artist_search_item_placeholder">Loading...</string>
-    <string name="artist_search_item_image_description">Artist Image</string>
+
+    <!-- Artist view strings -->
+    <string name="artist_view_title">ArtistViewActivity</string>
 
     <!-- Logging strings -->
     <string name="log_tag">@string/app_name</string>
@@ -25,6 +33,6 @@
     MESSAGE: %3$s</string>
     <string name="log_image_load_error">Failed to load image: %1$s</string>
 
-    <!-- query URLS -->
-    <string name="query_url_artist">https://api.spotify.com/v1/search?q=%1$s&amp;type=artist</string>
+    <!-- Misc Strings -->
+    <string name="intent_extra_base">%1$s.IntentExtra.%2$s.%3$s</string>
 </resources>

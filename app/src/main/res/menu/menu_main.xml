@@ -2,11 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
     <item android:id="@+id/action_search_artist"
-        android:title="@string/action_search_artist"
+        android:title="@string/action_search"
         android:icon="@drawable/ic_search_black_24dp"
         android:orderInCategory="0"
         android:showAsAction="always"
-        android:actionViewClass="android.widget.SearchView" />
+        android:iconifiedByDefault="false"/>
 
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"

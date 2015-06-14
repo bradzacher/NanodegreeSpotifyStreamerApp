@@ -1,6 +1,5 @@
 package au.com.zacher.spotifystreamer;
 
-import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
@@ -8,7 +7,7 @@ import android.util.Log;
  * Wrapper for the logger to simplify logging a little bit with string resources
  * Uses
  */
-public class Logger extends Application {
+public class Logger {
     private static boolean VERBOSE = true;
 
     static {
