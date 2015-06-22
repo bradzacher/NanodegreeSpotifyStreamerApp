@@ -24,6 +24,8 @@ import au.com.zacher.spotifystreamer.R;
 import au.com.zacher.spotifystreamer.ActivityInitialiser;
 import au.com.zacher.spotifystreamer.ToolbarOptions;
 import au.com.zacher.spotifystreamer.adapter.SearchListAdapter;
+import au.com.zacher.spotifystreamer.model.DisplayItem;
+import au.com.zacher.spotifystreamer.model.DisplayItemViewHolder;
 import au.com.zacher.spotifystreamer.provider.SearchHistoryProvider;
 import retrofit.RetrofitError;
 
@@ -54,18 +56,18 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SearchListAdapter.ViewHolder holder = listAdapter.getViewHolder(view);
+                DisplayItemViewHolder holder = listAdapter.getViewHolder(view);
 
                 // successful query, so save if for quick usage next time
                 SearchHistoryProvider provider = getSearchHistoryProvider();
-                provider.addHistory(holder.getId(), holder.getName().getText().toString(), holder.getImageUrl());
+                provider.addHistory(holder.item);
 
                 listAdapter.onItemClick(activity, view);
             }
         });
 
-        this.progressBar = (ProgressBar)this.findViewById(R.id.activity_search_progress_bar);
-        this.noResultsText = (TextView)this.findViewById(R.id.activity_search_no_results);
+        this.progressBar = (ProgressBar)this.findViewById(R.id.progress_bar);
+        this.noResultsText = (TextView)this.findViewById(R.id.no_results_text);
 
         this.buildListFromHistory();
     }
@@ -123,7 +125,7 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
                             progressBar.setVisibility(View.GONE);
 
                             listAdapter.clear();
-                            listAdapter.addAll(list);
+                            listAdapter.addAllItems(list);
 
                             if (list.size() > 0) {
                                 getListView().setVisibility(View.VISIBLE);
@@ -157,11 +159,9 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
 
         // build an initial list from the user's history
         SearchHistoryProvider provider = this.getSearchHistoryProvider();
-        List<String[]> history = provider.getHistory();
+        List<DisplayItem> history = provider.getHistory();
         if (history.size() > 0) {
-            for (String[] item : history) {
-                this.listAdapter.add(this.createBasicItem(item[0], item[1], item[2]));
-            }
+            this.listAdapter.addAll(history);
             this.getListView().setVisibility(View.VISIBLE);
             noResultsText.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
@@ -222,13 +222,6 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
      * @return
      */
     protected abstract SearchHistoryProvider getSearchHistoryProvider();
-    /**
-     * Creates a basic item for use as a search history item
-     * @param description
-     * @param imageUrl
-     * @return
-     */
-    protected abstract T createBasicItem(String id, String description, String imageUrl);
 
     /**
      * For performing extra actions once a query returns

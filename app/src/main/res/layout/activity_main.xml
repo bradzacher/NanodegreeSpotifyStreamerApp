@@ -13,14 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--
-                <fragment
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:name="au.com.zacher.spotifystreamer.activity.fragment.ScreenWidthCardList"
-                    android:id="@+id/main_activity_new_releases_grid"
-                    tools:layout="@layout/fragment_grid_item"/>
-        -->
+        <fragment
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:name="au.com.zacher.spotifystreamer.activity.fragment.ScreenWidthCardList"
+            android:id="@+id/new_releases_fragment"
+            tools:layout="@layout/fragment_screen_width_list" />
     </ScrollView>
 
 </LinearLayout>

@@ -1,7 +1,6 @@
 package au.com.zacher.spotifystreamer.provider;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 
 /**
  * Created by Brad on 14/06/2015.

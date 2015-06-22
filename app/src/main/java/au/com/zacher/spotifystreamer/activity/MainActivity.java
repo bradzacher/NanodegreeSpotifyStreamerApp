@@ -2,6 +2,7 @@ package au.com.zacher.spotifystreamer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,11 +11,10 @@ import au.com.zacher.spotifystreamer.Logger;
 import au.com.zacher.spotifystreamer.R;
 import au.com.zacher.spotifystreamer.ActivityInitialiser;
 import au.com.zacher.spotifystreamer.ToolbarOptions;
+import au.com.zacher.spotifystreamer.activity.fragment.ScreenWidthCardList;
+import au.com.zacher.spotifystreamer.model.DisplayItem;
 
 public class MainActivity extends AppCompatActivity implements android.support.v7.widget.Toolbar.OnMenuItemClickListener {
-    //SearchBox searchBox;
-    boolean searchBoxOpened = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Logger.setContext(getApplicationContext());
@@ -24,6 +24,16 @@ public class MainActivity extends AppCompatActivity implements android.support.v
         ToolbarOptions options = new ToolbarOptions();
         options.enableUpButton = false;
         ActivityInitialiser.initActivity(options, savedInstanceState, this, R.layout.activity_main);
+
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        ScreenWidthCardList newReleases = (ScreenWidthCardList)fragmentManager.findFragmentById(R.id.new_releases_fragment);
+        newReleases.setTitle("New Releases");
+        newReleases.setItems(new DisplayItem[]{
+                new DisplayItem("-1", "https://i.scdn.co/image/d181666ebeda1aa062a5f0250b85be6150badd0f", "TEST"),
+                new DisplayItem("-1", "https://i.scdn.co/image/d181666ebeda1aa062a5f0250b85be6150badd0f", "TEST"),
+                new DisplayItem("-1", "https://i.scdn.co/image/d181666ebeda1aa062a5f0250b85be6150badd0f", "TEST"),
+                new DisplayItem("-1", "https://i.scdn.co/image/d181666ebeda1aa062a5f0250b85be6150badd0f", "TEST")
+        });
     }
 
     @Override
@@ -56,14 +66,4 @@ public class MainActivity extends AppCompatActivity implements android.support.v
     public boolean onMenuItemClick(MenuItem item) {
         return this.onOptionsItemSelected(item);
     }
-    /*
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SearchBox.VOICE_RECOGNITION_CODE && resultCode == this.RESULT_OK) {
-            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            searchBox.populateEditText(matches);
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-    */
 }

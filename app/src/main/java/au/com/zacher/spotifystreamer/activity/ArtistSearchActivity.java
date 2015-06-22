@@ -1,6 +1,5 @@
 package au.com.zacher.spotifystreamer.activity;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
@@ -13,7 +12,6 @@ import au.com.zacher.spotifystreamer.provider.SearchHistoryProvider;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
-import kaaes.spotify.webapi.android.models.Image;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -59,21 +57,5 @@ public class ArtistSearchActivity extends SearchActivity<Artist> {
     @Override
     protected SearchHistoryProvider getSearchHistoryProvider() {
         return new ArtistSearchHistoryProvider(this);
-    }
-
-    @Override
-    protected Artist createBasicItem(String id, String description, String imageUrl) {
-        Artist artist = new Artist();
-        artist.id = id;
-        artist.images = new ArrayList<Image>(1);
-        Image i = new Image();
-        i.url = imageUrl;
-        // don't need legit size because there's only 1 image
-        i.height = -1;
-        i.width = -1;
-        artist.images.add(i);
-        artist.name = description;
-
-        return artist;
     }
 }

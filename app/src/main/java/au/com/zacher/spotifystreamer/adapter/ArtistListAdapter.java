@@ -18,8 +18,13 @@ public class ArtistListAdapter extends SearchListAdapter<Artist> {
     }
 
     @Override
-    protected String getItemText(Artist item) {
+    protected String getItemTitle(Artist item) {
         return item.name;
+    }
+
+    @Override
+    protected String getItemSubtitle(Artist item) {
+        return null;
     }
 
     @Override

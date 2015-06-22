@@ -10,44 +10,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-
+import java.util.Collection;
 import java.util.List;
 
-import au.com.zacher.spotifystreamer.Logger;
+import au.com.zacher.spotifystreamer.model.DisplayItem;
+import au.com.zacher.spotifystreamer.model.DisplayItemViewHolder;
 import au.com.zacher.spotifystreamer.R;
+import au.com.zacher.spotifystreamer.Utilities;
 import kaaes.spotify.webapi.android.models.Image;
 
 /**
  * Created by Brad on 14/06/2015.
  */
-public abstract class SearchListAdapter<T> extends ArrayAdapter<T> {
-    // https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView#improving-performance-with-the-viewholder-pattern
-    public static class ViewHolder {
-        TextView name;
-        ImageView image;
-        int position;
-        String imageUrl;
-        String id;
-
-        public TextView getName() {
-            return name;
-        }
-        public ImageView getImage() {
-            return image;
-        }
-        public int getPosition() {
-            return position;
-        }
-        public String getImageUrl() {
-            return imageUrl;
-        }
-        public String getId() {
-            return id;
-        }
-    }
-
+public abstract class SearchListAdapter<T> extends ArrayAdapter<DisplayItem> {
     public SearchListAdapter(Context context, int resource) {
         super(context, resource);
     }
@@ -57,27 +32,15 @@ public abstract class SearchListAdapter<T> extends ArrayAdapter<T> {
      * @param view
      * @return
      */
-    public ViewHolder getViewHolder(View view) {
-        return (ViewHolder)view.getTag();
+    public DisplayItemViewHolder getViewHolder(View view) {
+        return (DisplayItemViewHolder)view.getTag();
     }
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        T item = this.getItem(position);
-
-        // use ViewHolder pattern to speedup performance
-        final ViewHolder holder;
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_search_item, parent, false);
-            holder = new ViewHolder();
-            holder.name = (TextView)convertView.findViewById(R.id.search_fragment_name);
-            holder.image = (ImageView)convertView.findViewById(R.id.search_fragment_image);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder)convertView.getTag();
-        }
-
-        // figure out the best image url
+    /**
+     * Adds a Display item for the given item
+     * @param item
+     */
+    public void addItem(T item) {
         List<Image> images = getItemImages(item);
         String url = null;
         if (!images.isEmpty()) {
@@ -107,36 +70,44 @@ public abstract class SearchListAdapter<T> extends ArrayAdapter<T> {
             url = closestImage.url;
         }
 
+        DisplayItem displayItem = new DisplayItem(this.getItemId(item), url, this.getItemTitle(item), this.getItemSubtitle(item));
+        this.add(displayItem);
+    }
+
+    /**
+     * Adds a DisplayItem for each item in the collection
+     * @param collection
+     */
+    public void addAllItems(Collection<? extends T> collection) {
+        for (T item : collection) {
+            this.addItem(item);
+        }
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        DisplayItem item = this.getItem(position);
+
+        // use ViewHolder pattern to speedup performance
+        final DisplayItemViewHolder holder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_search_item, parent, false);
+            holder = new DisplayItemViewHolder(convertView);
+            holder.title = (TextView)convertView.findViewById(R.id.title);
+            holder.subtitle = (TextView)convertView.findViewById(R.id.subtitle);
+            holder.image = (ImageView)convertView.findViewById(R.id.image);
+            convertView.setTag(holder);
+        } else {
+            holder = (DisplayItemViewHolder)convertView.getTag();
+        }
+
         // bind the values to the view
         holder.position = position;
-        holder.name.setText(getItemText(item));
-        holder.imageUrl = url;
-        holder.id = getItemId(item);
+        holder.title.setText(item.title);
+        holder.subtitle.setText(item.subtitle);
+        holder.item = item;
 
-        // we load the image into a background imageView first so we can check that the view hsan't been recycled before swapping it in
-        // this will prevent accidents where artist images are shown for the incorrect artist if the image loads after recycling
-        final ImageView backgroundLoadedImage = new ImageView(this.getContext());
-        final String finalUrl = url;
-        holder.image.setImageDrawable(this.getContext().getResources().getDrawable(R.drawable.ic_music_note_black_48dp));
-        Picasso.with(getContext())
-                .load(url)
-                .error(R.drawable.ic_error_outline_black_48dp)
-                .into(backgroundLoadedImage, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        if (holder.position == position) {
-                            holder.image.setImageDrawable(backgroundLoadedImage.getDrawable());
-                        }
-                    }
-
-                    @Override
-                    public void onError() {
-                        Logger.e(R.string.log_image_load_error, finalUrl);
-                        if (holder.position == position) {
-                            holder.image.setImageDrawable(backgroundLoadedImage.getDrawable());
-                        }
-                    }
-                });
+        Utilities.backgroundLoadImage(this.getContext(), item, holder, position);
 
         return convertView;
     }
@@ -146,8 +117,8 @@ public abstract class SearchListAdapter<T> extends ArrayAdapter<T> {
      * @param clickedView
      */
     public void onItemClick(Activity activity, View clickedView) {
-        SearchListAdapter.ViewHolder v = (SearchListAdapter.ViewHolder)clickedView.getTag();
-        String id = this.getItemId(this.getItem(v.position));
+        DisplayItemViewHolder v = (DisplayItemViewHolder)clickedView.getTag();
+        String id = this.getItem(v.position).id;
         if (id != null) {
             // open the required view
             Intent i = new Intent(activity, this.getClickActivityClass())
@@ -157,11 +128,17 @@ public abstract class SearchListAdapter<T> extends ArrayAdapter<T> {
     }
 
     /**
-     * Gets the text to display for an item
+     * Gets the title text to display for an item
      * @param item
      * @return
      */
-    protected abstract String getItemText(T item);
+    protected abstract String getItemTitle(T item);
+    /**
+     * Gets the subtitle text to display for an item
+     * @param item
+     * @return
+     */
+    protected abstract String getItemSubtitle(T item);
     /**
      * Gets the list of images for an item
      * @param item

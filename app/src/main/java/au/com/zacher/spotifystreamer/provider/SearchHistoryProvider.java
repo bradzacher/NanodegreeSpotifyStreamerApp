@@ -11,17 +11,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import au.com.zacher.spotifystreamer.model.DisplayItem;
+
 /**
  * Created by Brad on 14/06/2015.
  */
 public abstract class SearchHistoryProvider extends SQLiteOpenHelper {
     private static final int HISTORY_MAX_COUNT = 10;
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "search_history";
     private static final String TABLE_NAME = DATABASE_NAME;
 
-    private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (id TEXT PRIMARY KEY, type TEXT, description TEXT, image_url TEXT, query_date DATETIME DEFAULT CURRENT_TIMESTAMP);";
+    private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (id TEXT PRIMARY KEY, type TEXT, image_url TEXT, title TEXT, subtitle TEXT, query_date DATETIME DEFAULT CURRENT_TIMESTAMP);";
     private static final String TABLE_DELETE = "DROP TABLE " + TABLE_NAME;
 
     private static SearchHistoryProvider currentDb;
@@ -43,10 +45,9 @@ public abstract class SearchHistoryProvider extends SQLiteOpenHelper {
 
     /**
      * Inserts a new history entry and maintains the maximum history length
-     * @param description
-     * @param imageUrl
+     * @param item
      */
-    public void addHistory(String id, String description, String imageUrl) {
+    public void addHistory(DisplayItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String type = getType();
@@ -55,10 +56,11 @@ public abstract class SearchHistoryProvider extends SQLiteOpenHelper {
         try {
             // insert the new row
             ContentValues values = new ContentValues();
-            values.put("id", id);
+            values.put("id", item.id);
             values.put("type", type);
-            values.put("description", description);
-            values.put("image_url", imageUrl);
+            values.put("image_url", item.imageUrl);
+            values.put("title", item.title);
+            values.put("subtitle", item.subtitle);
             try {
                 db.insert(TABLE_NAME, null, values);
             } catch (SQLiteConstraintException ex) {} // ignore the duplicate constraint error
@@ -76,22 +78,23 @@ public abstract class SearchHistoryProvider extends SQLiteOpenHelper {
         db.close();
     }
 
-    public List<String[]> getHistory() {
+    public List<DisplayItem> getHistory() {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        ArrayList<String[]> results = new ArrayList<String[]>();
+        ArrayList<DisplayItem> results = new ArrayList<DisplayItem>();
 
         db.beginTransaction();
         try {
-            Cursor cur = db.query(TABLE_NAME, new String[] {"id", "description", "image_url"}, "type = ?", new String[] {this.getType()}, null, null, "query_date DESC");
+            Cursor cur = db.query(TABLE_NAME, new String[] {"id", "image_url", "title", "subtitle"}, "type = ?", new String[] {this.getType()}, null, null, "query_date DESC");
             if (cur.getCount() > 0) {
                 cur.moveToFirst();
                 do {
-                    String[] item = new String[]{
+                    DisplayItem item = new DisplayItem(
                             cur.getString(0),
                             cur.getString(1),
-                            cur.getString(2)
-                    };
+                            cur.getString(2),
+                            cur.getString(3)
+                    );
                     results.add(item);
 
                     cur.moveToNext();
