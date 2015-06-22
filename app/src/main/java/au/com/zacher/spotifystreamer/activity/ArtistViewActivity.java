@@ -7,7 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import au.com.zacher.spotifystreamer.Logger;
 import au.com.zacher.spotifystreamer.R;
+import au.com.zacher.spotifystreamer.ActivityInitialiser;
+import au.com.zacher.spotifystreamer.ToolbarOptions;
 
 
 public class ArtistViewActivity extends Activity {
@@ -20,8 +23,12 @@ public class ArtistViewActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Logger.logActionCreate("ArtistViewActivity");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_artist_view);
+        // setup the toolbar and content view
+        ToolbarOptions options = new ToolbarOptions();
+        options.enableUpButton = true;
+        ActivityInitialiser.initActivity(options, savedInstanceState, this, R.layout.activity_artist_view);
 
         // fetch the artist ID from the intent
         Intent i = this.getIntent();

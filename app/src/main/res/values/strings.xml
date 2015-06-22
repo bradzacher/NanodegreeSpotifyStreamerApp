@@ -7,32 +7,37 @@
 
     <!-- Main view strings -->
     <string name="main_activity_title">@string/app_name</string>
-    <string name="main_activity_hint">Use the search feature to search for your favourite artist!</string>
+    <string name="main_activity_title_new_releases">New Releases</string>
 
     <!-- Search view strings -->
     <string name="search_no_results">Your search returned no results...</string>
     <string name="search_item_placeholder">Loading...</string>
-    <string name="search_item_image_description">Item Image</string>
 
     <!-- Artist search view strings -->
-    <string name="artist_search_activity_title">Artist Search</string>
+    <string name="artist_search_activity_title">Search</string>
     <string name="artist_search_hint">Artist Search</string>
 
     <!-- Artist view strings -->
     <string name="artist_view_title">ArtistViewActivity</string>
 
     <!-- Logging strings -->
-    <string name="log_tag">@string/app_name</string>
-    <string name="log_search_formatter">Search string: "%1$s"</string>
-    <string name="log_onCreate_formatter">Created Activity: "%1$s"</string>
-    <string name="log_method_call_formatter">Called Method: "%1$s" on class "%2$s"</string>
-    <string name="log_wtf">This should never happen</string>
-    <string name="log_api_error">Spotify API Error:
+    <string name="log_tag" translatable="false">@string/app_name</string>
+    <string name="log_search_formatter" translatable="false">Search string: "%1$s"</string>
+    <string name="log_onCreate_formatter" translatable="false">Created Activity: "%1$s"</string>
+    <string name="log_method_call_formatter" translatable="false">Called Method: "%1$s" on class "%2$s"</string>
+    <string name="log_wtf" translatable="false">This should never happen</string>
+    <string name="log_api_error" translatable="false">Spotify API Error:
     URL: %1$s
     STATUS: %2$s
     MESSAGE: %3$s</string>
     <string name="log_image_load_error">Failed to load image: %1$s</string>
 
     <!-- Misc Strings -->
-    <string name="intent_extra_base">%1$s.IntentExtra.%2$s.%3$s</string>
+    <string name="intent_extra_base" translatable="false">%1$s.IntentExtra.%2$s.%3$s</string>
+    <string name="search_hint">Search</string>
+
+    <!-- Content Descriptions -->
+    <string name="content_description_album">Album Art</string>
+    <string name="content_description_item">Item Image</string>
+
 </resources>

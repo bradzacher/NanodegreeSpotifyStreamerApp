@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -58,7 +59,9 @@ public abstract class SearchHistoryProvider extends SQLiteOpenHelper {
             values.put("type", type);
             values.put("description", description);
             values.put("image_url", imageUrl);
-            db.insert(TABLE_NAME, null, values);
+            try {
+                db.insert(TABLE_NAME, null, values);
+            } catch (SQLiteConstraintException ex) {} // ignore the duplicate constraint error
 
             // delete any rows over the max limit
             String[] typeArg = new String[] { type };

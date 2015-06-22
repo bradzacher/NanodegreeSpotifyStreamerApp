@@ -4,13 +4,15 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.SearchRecentSuggestions;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
+import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -19,25 +21,30 @@ import java.util.Map;
 
 import au.com.zacher.spotifystreamer.Logger;
 import au.com.zacher.spotifystreamer.R;
+import au.com.zacher.spotifystreamer.ActivityInitialiser;
+import au.com.zacher.spotifystreamer.ToolbarOptions;
 import au.com.zacher.spotifystreamer.adapter.SearchListAdapter;
-import au.com.zacher.spotifystreamer.provider.ArtistSearchHistoryProvider;
 import au.com.zacher.spotifystreamer.provider.SearchHistoryProvider;
 import retrofit.RetrofitError;
 
 
-public abstract class SearchActivity<T> extends ListActivity implements SearchView.OnQueryTextListener {
+public abstract class SearchActivity<T> extends ListActivity implements SearchView.OnQueryTextListener, android.support.v7.widget.Toolbar.OnMenuItemClickListener {
     private SearchListAdapter<T> listAdapter;
     private SearchView searchBox;
 
     private ProgressBar progressBar;
     private TextView noResultsText;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Logger.logActionCreate("SearchActivity");
-
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_search);
+        // setup the toolbar
+        ToolbarOptions options = new ToolbarOptions();
+        options.enableUpButton = true;
+        this.toolbar = ActivityInitialiser.initActivity(options, savedInstanceState, this, R.layout.activity_search);
 
         this.listAdapter = this.initListAdapter();
         this.setListAdapter(listAdapter);
@@ -164,14 +171,16 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search_results, menu);
+        //this.getMenuInflater().inflate(R.menu.menu_search_results, menu);
+        this.toolbar.inflateMenu(R.menu.menu_search_results);
 
-        this.searchBox = (SearchView)menu.findItem(R.id.action_search).getActionView();
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        this.searchBox = (SearchView) MenuItemCompat.getActionView(searchItem);
         this.searchBox.setOnQueryTextListener(this);
         this.searchBox.setQueryHint(this.getSearchQueryHint());
         this.searchBox.setIconified(false);
 
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -184,6 +193,11 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
     public boolean onQueryTextChange(String newText) {
         this.handleSearch();
         return false;
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        return this.onOptionsItemSelected(item);
     }
 
     /**

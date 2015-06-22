@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="au.com.zacher.spotifystreamer" >
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,15 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="au.com.zacher.spotifystreamer.activity.ArtistSearchActivity"
             android:label="@string/artist_search_activity_title"
             android:launchMode="singleTop" >
         </activity>
+
         <activity
             android:name="au.com.zacher.spotifystreamer.activity.ArtistViewActivity"
             android:label="@string/artist_view_title"
-            android:parentActivityName=".activity.ArtistSearchActivity" >
+            android:parentActivityName="au.com.zacher.spotifystreamer.activity.ArtistSearchActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="au.com.zacher.spotifystreamer.activity.ArtistSearchActivity" />

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:gravity="left"
@@ -10,7 +11,7 @@
         android:layout_width="@dimen/search_fragment_image_size"
         android:layout_height="@dimen/search_fragment_image_size"
         android:id="@+id/search_fragment_image"
-        android:contentDescription="@string/search_item_image_description"
+        android:contentDescription="@string/content_description_item"
         android:src="@drawable/ic_error_outline_black_48dp" />
 
     <TextView android:layout_width="wrap_content"

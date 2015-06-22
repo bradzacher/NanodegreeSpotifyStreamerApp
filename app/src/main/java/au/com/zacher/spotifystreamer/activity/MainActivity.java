@@ -1,15 +1,17 @@
 package au.com.zacher.spotifystreamer.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import au.com.zacher.spotifystreamer.Logger;
 import au.com.zacher.spotifystreamer.R;
+import au.com.zacher.spotifystreamer.ActivityInitialiser;
+import au.com.zacher.spotifystreamer.ToolbarOptions;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity implements android.support.v7.widget.Toolbar.OnMenuItemClickListener {
     //SearchBox searchBox;
     boolean searchBoxOpened = false;
 
@@ -17,9 +19,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         Logger.setContext(getApplicationContext());
         Logger.logActionCreate("MainActivity");
-
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_main);
+        // setup the toolbar and contentView
+        ToolbarOptions options = new ToolbarOptions();
+        options.enableUpButton = false;
+        ActivityInitialiser.initActivity(options, savedInstanceState, this, R.layout.activity_main);
     }
 
     @Override
@@ -48,6 +52,9 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public boolean onMenuItemClick(MenuItem item) {
+        return this.onOptionsItemSelected(item);
     }
     /*
     @Override
