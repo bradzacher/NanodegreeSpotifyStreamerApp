@@ -26,7 +26,7 @@ import au.com.zacher.spotifystreamer.ToolbarOptions;
 import au.com.zacher.spotifystreamer.adapter.SearchListAdapter;
 import au.com.zacher.spotifystreamer.model.DisplayItem;
 import au.com.zacher.spotifystreamer.model.DisplayItemViewHolder;
-import au.com.zacher.spotifystreamer.provider.SearchHistoryProvider;
+import au.com.zacher.spotifystreamer.data.helper.SearchHistoryDbHelper;
 import retrofit.RetrofitError;
 
 
@@ -59,7 +59,7 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
                 DisplayItemViewHolder holder = listAdapter.getViewHolder(view);
 
                 // successful query, so save if for quick usage next time
-                SearchHistoryProvider provider = getSearchHistoryProvider();
+                SearchHistoryDbHelper provider = getSearchHistoryProvider();
                 provider.addHistory(holder.item);
 
                 listAdapter.onItemClick(activity, view);
@@ -78,7 +78,6 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
     }
     /**
      * Returns the current count for searches - to allow cancelling of queries and similar if a new search is made
-     * @return
      */
     protected int getSearchCount() {
         return this.searchCount;
@@ -91,6 +90,7 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
             return;
         }
 
+        //noinspection RedundantStringConstructorCall
         String query = new String(originalQuery);
 
         final int currentSearchCount = this.incrementSearchCount();
@@ -158,7 +158,7 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
         this.listAdapter.clear();
 
         // build an initial list from the user's history
-        SearchHistoryProvider provider = this.getSearchHistoryProvider();
+        SearchHistoryDbHelper provider = this.getSearchHistoryProvider();
         List<DisplayItem> history = provider.getHistory();
         if (history.size() > 0) {
             this.listAdapter.addAll(history);
@@ -202,26 +202,23 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
 
     /**
      * Initialises the empty list adapter for this activity
-     * @return
      */
     protected abstract SearchListAdapter<T> initListAdapter();
     /**
      * Performs a query using the given parameters, ensure you call callback.success and callback.failure in implementing classes
-     * @param query
-     * @param queryParams
-     * @param callback
+     * @param query the query to perform
+     * @param queryParams the parameters for the query
+     * @param callback the callback
      */
     protected abstract void doQuery(String query, Map<String, Object> queryParams, QueryCallback<T> callback);
     /**
      * Gets the hint string to display on the search box
-     * @return
      */
     protected abstract String getSearchQueryHint();
     /**
      * Gets the search history provider for the activity
-     * @return
      */
-    protected abstract SearchHistoryProvider getSearchHistoryProvider();
+    protected abstract SearchHistoryDbHelper getSearchHistoryProvider();
 
     /**
      * For performing extra actions once a query returns

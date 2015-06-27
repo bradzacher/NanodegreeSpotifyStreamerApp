@@ -18,4 +18,17 @@ public class DisplayItem {
         this.title = title;
         this.subtitle = subtitle;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof DisplayItem)) {
+            return false;
+        }
+        DisplayItem another = (DisplayItem)obj;
+
+        return this.id.equals(another.id) &&
+                this.imageUrl.equals(another.imageUrl) &&
+                this.title.equals(another.title) &&
+                this.subtitle.equals(another.subtitle);
+    }
 }

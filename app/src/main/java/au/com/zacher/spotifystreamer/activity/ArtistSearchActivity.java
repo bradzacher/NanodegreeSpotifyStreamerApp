@@ -7,8 +7,8 @@ import java.util.Map;
 import au.com.zacher.spotifystreamer.R;
 import au.com.zacher.spotifystreamer.adapter.ArtistListAdapter;
 import au.com.zacher.spotifystreamer.adapter.SearchListAdapter;
-import au.com.zacher.spotifystreamer.provider.ArtistSearchHistoryProvider;
-import au.com.zacher.spotifystreamer.provider.SearchHistoryProvider;
+import au.com.zacher.spotifystreamer.data.helper.ArtistSearchHistoryDbHelper;
+import au.com.zacher.spotifystreamer.data.helper.SearchHistoryDbHelper;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
@@ -55,7 +55,7 @@ public class ArtistSearchActivity extends SearchActivity<Artist> {
     }
 
     @Override
-    protected SearchHistoryProvider getSearchHistoryProvider() {
-        return new ArtistSearchHistoryProvider(this);
+    protected SearchHistoryDbHelper getSearchHistoryProvider() {
+        return new ArtistSearchHistoryDbHelper(this);
     }
 }
