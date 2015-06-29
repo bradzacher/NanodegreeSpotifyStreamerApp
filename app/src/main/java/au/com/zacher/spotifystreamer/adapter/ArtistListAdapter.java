@@ -43,7 +43,13 @@ public class ArtistListAdapter extends DisplayItemListAdapter<Artist> {
     }
 
     @Override
-    protected String getClickActivityExtraString() {
-        return ArtistViewActivity.INTENT_EXTRA;
+    protected String getIdIntentExtraString() {
+        return ArtistViewActivity.ID_INTENT_EXTRA;
     }
+
+    @Override
+    protected String getTitleIntentExtraString() {
+        return ArtistViewActivity.TITLE_INTENT_EXTRA;
+    }
+
 }

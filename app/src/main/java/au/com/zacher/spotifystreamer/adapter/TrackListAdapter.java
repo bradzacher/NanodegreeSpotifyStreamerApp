@@ -45,7 +45,12 @@ public class TrackListAdapter extends DisplayItemListAdapter<Track> {
     }
 
     @Override
-    protected String getClickActivityExtraString() {
+    protected String getIdIntentExtraString() {
+        return null;
+    }
+
+    @Override
+    protected String getTitleIntentExtraString() {
         return null;
     }
 }

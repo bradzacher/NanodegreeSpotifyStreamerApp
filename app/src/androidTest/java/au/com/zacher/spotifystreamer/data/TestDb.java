@@ -36,6 +36,11 @@ public class TestDb extends AndroidTestCase {
         deleteDb();
     }
 
+    @Override
+    protected void tearDown() {
+        deleteDb();
+    }
+
     public void testCreateDb() throws Throwable {
         SQLiteDatabase db = new DbHelper(this.mContext).getWritableDatabase();
         assertTrue(db.isOpen());
@@ -97,12 +102,19 @@ public class TestDb extends AndroidTestCase {
 
         ArtistSearchHistoryDbHelper db = new ArtistSearchHistoryDbHelper(this.mContext);
 
-        // test add
+        // test add a single
         DisplayItem item = randomItems.removeFirst();
         db.addHistory(item);
         items = db.getHistory();
         assertEquals("Error: there were more items than expected (" + seed + ")", items.size(), 1);
         assertTrue("Error: the item was not the same as expected (" + seed + ")", items.get(0).equals(item));
+
+        // test add the same item (should not make list longer)
+        db.addHistory(item);
+        items = db.getHistory();
+        assertEquals("Error: there were more items than expected (" + seed + ")", items.size(), 1);
+        assertTrue("Error: the item was not the same as expected (" + seed + ")", items.get(0).equals(item));
+
 
         // test the history limiter
         for (DisplayItem d : randomItems) {

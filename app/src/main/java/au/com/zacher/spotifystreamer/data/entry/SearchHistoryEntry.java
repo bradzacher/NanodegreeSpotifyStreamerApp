@@ -17,7 +17,7 @@ public final class SearchHistoryEntry extends DbEntry {
         DbColumn col;
         Map<String, DbColumn> map = new HashMap<>();
 
-        col = new DbColumn("id", ColumnType.TEXT);
+        col = new DbColumn("id", ColumnType.TEXT, true);
         COLUMN_ID = col;
         map.put("COLUMN_ID", col);
 

@@ -121,10 +121,12 @@ public abstract class DisplayItemListAdapter<T> extends ArrayAdapter<DisplayItem
 
         DisplayItemViewHolder v = (DisplayItemViewHolder)clickedView.getTag();
         String id = this.getItem(v.position).id;
+        String title = this.getItem(v.position).title;
         if (id != null) {
             // open the required view
             Intent i = new Intent(context, clickActivityClass)
-                    .putExtra(this.getClickActivityExtraString(), id);
+                    .putExtra(this.getIdIntentExtraString(), id)
+                    .putExtra(this.getTitleIntentExtraString(), title);
             this.getContext().startActivity(i);
         }
     }
@@ -154,5 +156,10 @@ public abstract class DisplayItemListAdapter<T> extends ArrayAdapter<DisplayItem
      * Gets the unique string which identifies where the item id should be stored in the launched {@link Intent}
      * @return the unique string if required, null if {@link DisplayItemListAdapter#getClickActivityClass()) returns null
      */
-    protected abstract String getClickActivityExtraString();
+    protected abstract String getIdIntentExtraString();
+    /**
+     * Gets the unique string which identifies where the item's title should be stored in the launched {@link Intent}
+     * @return the unique string if required, null if {@link DisplayItemListAdapter#getClickActivityClass()) returns null
+     */
+    protected abstract String getTitleIntentExtraString();
 }

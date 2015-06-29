@@ -28,8 +28,15 @@ public abstract class DisplayItemListActivity<T> extends ListActivity implements
     private DisplayItemListAdapter<T> listAdapter;
     private ProgressBar progressBar;
     private TextView noResultsText;
+
     /**
-     * Convenience method to get the list adapter as a {@link au.com.zacher.spotifystreamer.adapter.DisplayItemListAdapter}
+     * Convenience method to get the action bar as a {@link Toolbar}
+     */
+    public Toolbar getToolbar() {
+        return this.toolbar;
+    }
+    /**
+     * Convenience method to get the list adapter as a {@link DisplayItemListAdapter}
      */
     public DisplayItemListAdapter<T> getDisplayItemListAdapter() {
         return this.listAdapter;
@@ -75,6 +82,14 @@ public abstract class DisplayItemListActivity<T> extends ListActivity implements
 
         this.progressBar = (ProgressBar)this.findViewById(R.id.progress_bar);
         this.noResultsText = (TextView)this.findViewById(R.id.no_results_text);
+
+        if (this.progressBar == null) {
+            throw new RuntimeException("Your content must have a ProgressBar whose id attribute is 'R.id.progress_bar' ('@id/progress_bar').");
+        }
+        if (this.noResultsText == null) {
+            throw new RuntimeException("Your content must have a TextView whose id attribute is 'R.id.no_results_text' ('@id/no_results_text).");
+        }
+
         this.noResultsText.setText(this.getResources().getString(this.getNoResultsTextId()));
     }
 
