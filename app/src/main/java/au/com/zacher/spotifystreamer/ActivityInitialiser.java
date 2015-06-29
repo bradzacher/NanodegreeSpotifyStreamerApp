@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatCallback;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 /**
  * Created by Brad on 22/06/2015.
@@ -18,11 +19,10 @@ public class ActivityInitialiser {
 
     /**
      * Sets up the view and toolbar
-     * @param options the options to use to init the toolbar
-     * @param savedInstanceState the saved app state
-     * @param activity the activity to initialise
-     * @param layoutId the id of the layout to use for the activity
-     * @return the toolbar instance
+     * @param savedInstanceState
+     * @param activity
+     * @param layoutId
+     * @return
      */
     public static Toolbar initActivity(ToolbarOptions options, Bundle savedInstanceState, final Activity activity, int layoutId) {
         Toolbar toolbar;
@@ -68,7 +68,12 @@ public class ActivityInitialiser {
 
         if (options.enableUpButton) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            toolbar.setNavigationOnClickListener(v -> activity.onBackPressed());
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    activity.onBackPressed();
+                }
+            });
         }
 
         return toolbar;

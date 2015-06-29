@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import au.com.zacher.spotifystreamer.data.entry.SearchHistoryEntry;
+import au.com.zacher.spotifystreamer.data.helper.DbHelper;
 import au.com.zacher.spotifystreamer.model.DisplayItem;
 
 /**

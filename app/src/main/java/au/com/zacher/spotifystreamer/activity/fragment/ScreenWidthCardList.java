@@ -37,8 +37,8 @@ public class ScreenWidthCardList extends Fragment {
     }
 
     /**
-     * Sets the list of items
-     * @param items the items to use
+     * Adds an item to the list
+     * @param items
      */
     public void setItems(DisplayItem[] items) {
         this.recyclerView.setAdapter(new CardListAdapter(items));
@@ -47,7 +47,7 @@ public class ScreenWidthCardList extends Fragment {
 
     /**
      * Sets the title text of the list
-     * @param text the text title
+     * @param text
      */
     public void setTitle(String text) {
         this.titleView.setText(text);
@@ -64,7 +64,9 @@ public class ScreenWidthCardList extends Fragment {
         public DisplayItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext())
                                    .inflate(R.layout.fragment_grid_item, parent, false);
-            return new DisplayItemViewHolder(v);
+
+            DisplayItemViewHolder vh = new DisplayItemViewHolder(v);
+            return vh;
         }
 
         @Override
