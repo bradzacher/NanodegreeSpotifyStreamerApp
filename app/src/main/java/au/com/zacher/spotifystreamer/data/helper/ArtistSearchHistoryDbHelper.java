@@ -2,8 +2,6 @@ package au.com.zacher.spotifystreamer.data.helper;
 
 import android.content.Context;
 
-import au.com.zacher.spotifystreamer.data.helper.SearchHistoryDbHelper;
-
 /**
  * Created by Brad on 14/06/2015.
  */

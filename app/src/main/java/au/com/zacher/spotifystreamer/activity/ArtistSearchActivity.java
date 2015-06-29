@@ -6,7 +6,7 @@ import java.util.Map;
 
 import au.com.zacher.spotifystreamer.R;
 import au.com.zacher.spotifystreamer.adapter.ArtistListAdapter;
-import au.com.zacher.spotifystreamer.adapter.SearchListAdapter;
+import au.com.zacher.spotifystreamer.adapter.DisplayItemListAdapter;
 import au.com.zacher.spotifystreamer.data.helper.ArtistSearchHistoryDbHelper;
 import au.com.zacher.spotifystreamer.data.helper.SearchHistoryDbHelper;
 import kaaes.spotify.webapi.android.SpotifyApi;
@@ -21,8 +21,13 @@ import retrofit.client.Response;
  */
 public class ArtistSearchActivity extends SearchActivity<Artist> {
     @Override
-    protected SearchListAdapter<Artist> initListAdapter() {
-        return new ArtistListAdapter(this, R.layout.fragment_search_item);
+    protected DisplayItemListAdapter<Artist> initListAdapter() {
+        return new ArtistListAdapter(this, R.layout.fragment_display_item);
+    }
+
+    @Override
+    protected int getNoResultsTextId() {
+        return R.string.search_no_results;
     }
 
     @Override

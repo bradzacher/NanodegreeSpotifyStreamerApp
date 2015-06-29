@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 import au.com.zacher.spotifystreamer.data.entry.SearchHistoryEntry;
-import au.com.zacher.spotifystreamer.data.helper.DbHelper;
 import au.com.zacher.spotifystreamer.model.DisplayItem;
 
 /**
@@ -65,6 +64,9 @@ public abstract class SearchHistoryDbHelper extends DbHelper {
         db.close();
     }
 
+    /**
+     * Gets the list of {@link SearchHistoryDbHelper#HISTORY_MAX_COUNT} items from the history
+     */
     public List<DisplayItem> getHistory() {
         SQLiteDatabase db = this.getReadableDatabase();
 

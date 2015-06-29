@@ -19,10 +19,11 @@ public class ActivityInitialiser {
 
     /**
      * Sets up the view and toolbar
-     * @param savedInstanceState
-     * @param activity
-     * @param layoutId
-     * @return
+     * @param options the options to use to build the toolbar
+     * @param savedInstanceState the saved state to build the activity from
+     * @param activity the activity to initialise
+     * @param layoutId the id of the layout to inflate into the activity
+     * @return the instance of the {@link Toolbar} that was constructed
      */
     public static Toolbar initActivity(ToolbarOptions options, Bundle savedInstanceState, final Activity activity, int layoutId) {
         Toolbar toolbar;
@@ -35,19 +36,14 @@ public class ActivityInitialiser {
             // setup the toolbar
             AppCompatCallback callback = new AppCompatCallback() {
                 @Override
-                public void onSupportActionModeStarted(ActionMode actionMode) {
-                    // TODO
-                }
+                public void onSupportActionModeStarted(ActionMode actionMode) {}
 
                 @Override
-                public void onSupportActionModeFinished(ActionMode actionMode) {
-                    // TODO
-                }
+                public void onSupportActionModeFinished(ActionMode actionMode) {}
 
                 @Nullable
                 @Override
                 public ActionMode onWindowStartingSupportActionMode(ActionMode.Callback callback) {
-                    // TODO
                     return null;
                 }
             };

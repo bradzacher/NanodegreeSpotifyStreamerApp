@@ -18,7 +18,9 @@
     <string name="artist_search_hint">Artist Search</string>
 
     <!-- Artist view strings -->
+    <string name="artist_view_no_results">This artist has no top tracks...</string>
     <string name="artist_view_title">ArtistViewActivity</string>
+    <string name="artist_view_toast_text">This feature is not yet implemented.</string>
 
     <!-- Logging strings -->
     <string name="log_tag" translatable="false">@string/app_name</string>
@@ -39,5 +41,4 @@
     <!-- Content Descriptions -->
     <string name="content_description_album">Album Art</string>
     <string name="content_description_item">Item Image</string>
-
 </resources>

@@ -16,6 +16,7 @@ public class DbColumn {
      * @param name the name of the column
      * @param type the type of the column
      */
+    @SuppressWarnings("unused")
     public DbColumn(String name, ColumnType type) {
         this(name, type, false);
     }
@@ -26,6 +27,7 @@ public class DbColumn {
      * @param type the type of the column
      * @param isPrimaryKey true if this column is a primary key, false otherwise
      */
+    @SuppressWarnings("unused")
     public DbColumn(String name, ColumnType type, boolean isPrimaryKey) {
         this(name, type, isPrimaryKey, true, null);
     }
@@ -35,6 +37,7 @@ public class DbColumn {
      * @param name the name of the column
      * @param isPrimaryKey true if this column is a primary key, false otherwise
      */
+    @SuppressWarnings("unused")
     public DbColumn(String name, boolean isPrimaryKey) {
         this.name = name;
         this.type = ColumnType.INTEGER;
@@ -50,6 +53,7 @@ public class DbColumn {
      * @param type the type of the column
      * @param defaultValue the defualt value of the column - note that the caller is responsible for correct stringification of the default value
      */
+    @SuppressWarnings("unused")
     public DbColumn(String name, ColumnType type, String defaultValue) {
         this(name, type, false, true, defaultValue);
     }

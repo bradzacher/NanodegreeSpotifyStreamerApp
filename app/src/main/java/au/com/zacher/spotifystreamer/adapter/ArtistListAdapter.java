@@ -11,7 +11,7 @@ import kaaes.spotify.webapi.android.models.Image;
 /**
  * Created by Brad on 7/06/2015.
  */
-public class ArtistListAdapter extends SearchListAdapter<Artist> {
+public class ArtistListAdapter extends DisplayItemListAdapter<Artist> {
 
     public ArtistListAdapter(Context context, int resource) {
         super(context, resource);

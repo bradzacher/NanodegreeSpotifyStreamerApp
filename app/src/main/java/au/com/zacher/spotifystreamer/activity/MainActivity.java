@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements android.support.v
 
         return super.onOptionsItemSelected(item);
     }
+    @Override
     public boolean onMenuItemClick(MenuItem item) {
         return this.onOptionsItemSelected(item);
     }
