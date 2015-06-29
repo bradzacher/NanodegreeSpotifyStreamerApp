@@ -29,8 +29,6 @@ public abstract class SearchListAdapter<T> extends ArrayAdapter<DisplayItem> {
 
     /**
      * Gets the viewHolder for the given view
-     * @param view
-     * @return
      */
     public DisplayItemViewHolder getViewHolder(View view) {
         return (DisplayItemViewHolder)view.getTag();
@@ -38,7 +36,7 @@ public abstract class SearchListAdapter<T> extends ArrayAdapter<DisplayItem> {
 
     /**
      * Adds a Display item for the given item
-     * @param item
+     * @param item the item to add
      */
     public void addItem(T item) {
         List<Image> images = getItemImages(item);
@@ -76,7 +74,7 @@ public abstract class SearchListAdapter<T> extends ArrayAdapter<DisplayItem> {
 
     /**
      * Adds a DisplayItem for each item in the collection
-     * @param collection
+     * @param collection the collection of items
      */
     public void addAllItems(Collection<? extends T> collection) {
         for (T item : collection) {
@@ -98,7 +96,7 @@ public abstract class SearchListAdapter<T> extends ArrayAdapter<DisplayItem> {
             holder.image = (ImageView)convertView.findViewById(R.id.image);
             convertView.setTag(holder);
         } else {
-            holder = (DisplayItemViewHolder)convertView.getTag();
+            holder = this.getViewHolder(convertView);
         }
 
         // bind the values to the view
@@ -114,10 +112,11 @@ public abstract class SearchListAdapter<T> extends ArrayAdapter<DisplayItem> {
 
     /**
      * Actions user interaction with the list
-     * @param clickedView
+     * @param activity the activity to launch
+     * @param clickedView the view that was clicked on
      */
     public void onItemClick(Activity activity, View clickedView) {
-        DisplayItemViewHolder v = (DisplayItemViewHolder)clickedView.getTag();
+        DisplayItemViewHolder v = this.getViewHolder(clickedView);
         String id = this.getItem(v.position).id;
         if (id != null) {
             // open the required view
@@ -129,36 +128,26 @@ public abstract class SearchListAdapter<T> extends ArrayAdapter<DisplayItem> {
 
     /**
      * Gets the title text to display for an item
-     * @param item
-     * @return
      */
     protected abstract String getItemTitle(T item);
     /**
      * Gets the subtitle text to display for an item
-     * @param item
-     * @return
      */
     protected abstract String getItemSubtitle(T item);
     /**
      * Gets the list of images for an item
-     * @param item
-     * @return
      */
     protected abstract List<Image> getItemImages(T item);
     /**
      * Gets the id for an item
-     * @param item
-     * @return
      */
     protected abstract String getItemId(T item);
     /**
      * Gets the class of the {@link android.app.Activity} to launch on click
-     * @return
      */
     protected abstract Class getClickActivityClass();
     /**
      * Gets the unique string which identifies where the item id should be stored in the intent
-     * @return
      */
     protected abstract String getClickActivityExtraString();
 }

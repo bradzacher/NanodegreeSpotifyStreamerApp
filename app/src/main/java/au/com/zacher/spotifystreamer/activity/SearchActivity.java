@@ -53,17 +53,14 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
 
         final Activity activity = this;
         ListView list = (ListView)this.findViewById(android.R.id.list);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DisplayItemViewHolder holder = listAdapter.getViewHolder(view);
+        list.setOnItemClickListener((parent, view, position, id) -> {
+            DisplayItemViewHolder holder = listAdapter.getViewHolder(view);
 
-                // successful query, so save if for quick usage next time
-                SearchHistoryDbHelper provider = getSearchHistoryProvider();
-                provider.addHistory(holder.item);
+            // successful query, so save if for quick usage next time
+            SearchHistoryDbHelper provider = getSearchHistoryProvider();
+            provider.addHistory(holder.item);
 
-                listAdapter.onItemClick(activity, view);
-            }
+            listAdapter.onItemClick(activity, view);
         });
 
         this.progressBar = (ProgressBar)this.findViewById(R.id.progress_bar);
@@ -84,14 +81,11 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
     }
 
     private void handleSearch() {
-        final String originalQuery = searchBox.getQuery().toString();
-        if (originalQuery.length() == 0) {
+        String query = searchBox.getQuery().toString();
+        if (query.length() == 0) {
             this.buildListFromHistory();
             return;
         }
-
-        //noinspection RedundantStringConstructorCall
-        String query = new String(originalQuery);
 
         final int currentSearchCount = this.incrementSearchCount();
         this.progressBar.setVisibility(View.VISIBLE);
@@ -113,27 +107,24 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
         final Handler mainHandler = new Handler(this.getApplicationContext().getMainLooper());
 
         // query the API
-        HashMap<String, Object> queryParams = new HashMap<String, Object>();
+        HashMap<String, Object> queryParams = new HashMap<>();
         queryParams.put("limit", 50);
         this.doQuery(query, queryParams, new QueryCallback<T>() {
             @Override
             public void success(final List<T> list) {
                 if (getSearchCount() == currentSearchCount) {
-                    mainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressBar.setVisibility(View.GONE);
+                    mainHandler.post(() -> {
+                        progressBar.setVisibility(View.GONE);
 
-                            listAdapter.clear();
-                            listAdapter.addAllItems(list);
+                        listAdapter.clear();
+                        listAdapter.addAllItems(list);
 
-                            if (list.size() > 0) {
-                                getListView().setVisibility(View.VISIBLE);
-                                noResultsText.setVisibility(View.GONE);
-                            } else {
-                                getListView().setVisibility(View.GONE);
-                                noResultsText.setVisibility(View.VISIBLE);
-                            }
+                        if (list.size() > 0) {
+                            getListView().setVisibility(View.VISIBLE);
+                            noResultsText.setVisibility(View.GONE);
+                        } else {
+                            getListView().setVisibility(View.GONE);
+                            noResultsText.setVisibility(View.VISIBLE);
                         }
                     });
                 }
@@ -142,12 +133,7 @@ public abstract class SearchActivity<T> extends ListActivity implements SearchVi
             @Override
             public void failure(RetrofitError error) {
                 if (getSearchCount() == currentSearchCount) {
-                    mainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            listAdapter.clear();
-                        }
-                    });
+                    mainHandler.post(listAdapter::clear);
                 }
                 // TODO: display an error message
             }
